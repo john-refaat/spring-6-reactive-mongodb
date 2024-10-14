@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BeerDTO {
 
-    private Integer id;
+    private String id;
 
     @NotBlank
     @Size(min=3, max=255, message = "Name length must be between 3 and 255 characters")

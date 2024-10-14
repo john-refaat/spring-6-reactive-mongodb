@@ -6,6 +6,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author john
  * @since 13/10/2024
  */
+@Configuration
 public class MongoConfig extends AbstractReactiveMongoConfiguration {
     @Override
     protected String getDatabaseName() {
@@ -21,15 +23,15 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
     }
 
     @Bean
-    MongoClient mongoClient() {
+    MongoClient reactiMongoClient() {
         return MongoClients.create();
     }
 
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
         builder.credential(MongoCredential.createCredential("root", "admin",
-                "example.com".toCharArray()))
+                "example".toCharArray()))
                 .applyToClusterSettings(settings ->
-                        settings.hosts(List.of(new ServerAddress("localhost", 27017))));
+                        settings.hosts(List.of(new ServerAddress("127.0.0.1", 27017))));
     }
 }

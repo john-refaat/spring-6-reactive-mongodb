@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CustomerDTO {
-    private Integer id;
+    private String id;
 
     @NotBlank
     @Size(min=3, max=50)
