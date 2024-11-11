@@ -10,7 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author john
@@ -37,9 +37,9 @@ public class Beer {
     private BigDecimal price;
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    private Date createdDate;
 
     @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
+    private Date lastModifiedDate;
 
 }

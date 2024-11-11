@@ -8,6 +8,7 @@ import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @since 13/10/2024
  */
 @Configuration
+@EnableReactiveMongoAuditing
 public class MongoConfig extends AbstractReactiveMongoConfiguration {
     @Override
     protected String getDatabaseName() {
