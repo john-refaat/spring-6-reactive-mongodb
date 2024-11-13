@@ -38,7 +38,7 @@ public class BeerHandler {
     }
 
     private void validate(PatchBeerDTO beerDTO) {
-        Errors errors = new BeanPropertyBindingResult(beerDTO, "beerDTO");
+        Errors errors = new BeanPropertyBindingResult(beerDTO, "patchBeerDTO");
         validator.validate(beerDTO, errors);
         if (errors.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errors.toString());

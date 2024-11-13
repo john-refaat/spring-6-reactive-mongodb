@@ -1,7 +1,9 @@
 package guru.springframework.reactivemongo.bootstrap;
 
 import guru.springframework.reactivemongo.domain.Beer;
+import guru.springframework.reactivemongo.domain.Customer;
 import guru.springframework.reactivemongo.repository.BeerRepository;
+import guru.springframework.reactivemongo.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -20,11 +22,46 @@ public class BootstrapData implements CommandLineRunner  {
 
     private final BeerRepository beerRepository;
 
+    private final CustomerRepository customerRepository;
+
     @Override
     public void run(String... args) throws Exception {
         beerRepository.deleteAll().doOnSuccess(foo -> {
             loadBeerData();
         }).subscribe();
+
+        customerRepository.deleteAll().doOnSuccess(foo -> {
+            loadCustomerData();
+        }).subscribe();
+
+    }
+
+    private void loadCustomerData() {
+        log.info("Load Customer Data");
+        customerRepository.count().filter(count -> count==0).subscribe(count -> {
+            log.info("Loading customer data");
+            customerRepository.save(Customer.builder()
+                   .firstName("John")
+                   .lastName("Doe")
+                   .email("john.doe@example.com")
+                   .build()).subscribe();
+            customerRepository.save(Customer.builder()
+                   .firstName("Jane")
+                   .lastName("Smith")
+                   .email("jane.smith@example.com")
+                   .build()).subscribe();
+            customerRepository.save(Customer.builder()
+                   .firstName("Bob")
+                   .lastName("Johnson")
+                   .email("bob.johnson@example.com")
+                   .build()).subscribe();
+            customerRepository.save(Customer.builder()
+                   .firstName("Alice")
+                   .lastName("Williams")
+                   .email("alice.williams@example.com")
+                   .build()).subscribe();
+            log.info("Customer data loaded");
+        });
     }
 
     private void loadBeerData() {
