@@ -15,6 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt;
+
 /**
  * @author john
  * @since 02/11/2024
@@ -38,6 +40,7 @@ public class BeerEndpointTest {
 
     @BeforeEach
     void setUp() {
+        client = client.mutateWith(mockJwt());
         beerDTO = BeerDTO.builder()
                 .beerName("New Beer")
                 .beerStyle("New Style")

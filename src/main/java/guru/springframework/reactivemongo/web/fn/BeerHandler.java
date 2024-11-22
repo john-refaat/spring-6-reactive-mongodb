@@ -17,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static guru.springframework.reactivemongo.web.fn.BeerRouterConfig.BEER_PATH;
+
 /**
  * @author john
  * @since 02/11/2024
@@ -29,12 +31,14 @@ public class BeerHandler {
     private final Validator validator;
 
     private void validate(BeerDTO beerDTO) {
+        log.info("validating");
         Errors errors = new BeanPropertyBindingResult(beerDTO, "beerDTO");
         validator.validate(beerDTO, errors);
         if (errors.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errors.toString());
             //throw new ServerWebInputException(errors.toString());
         }
+        log.info("Done Validating");
     }
 
     private void validate(PatchBeerDTO beerDTO) {
@@ -70,15 +74,23 @@ public class BeerHandler {
         return beerService.saveBeer(request.bodyToMono(BeerDTO.class).doOnNext(this::validate))
                 .flatMap(beerDTO ->
                         ServerResponse.created(
-                                UriComponentsBuilder.fromPath(BeerRouterConfig.BEER_PATH)
+                                UriComponentsBuilder.fromPath(BEER_PATH)
                                         .pathSegment(beerDTO.getId()).build().toUri()
                         ).bodyValue(beerDTO));   //
     }
 
     public Mono<ServerResponse> updateBeer(ServerRequest request) {
+        log.info("Update beer");
+        log.info("Updating beer by id {}", request.pathVariable("beerId"));
         return request.bodyToMono(BeerDTO.class).doOnNext(this::validate)
                 .flatMap(beerDTO -> beerService.updateBeer(request.pathVariable("beerId"), beerDTO))
-                .flatMap(beerDTO -> ServerResponse.ok().bodyValue(beerDTO));
+                .flatMap(beerDTO -> {
+                    log.info("Result:{}", beerDTO);
+                    return ServerResponse.ok()
+                            .header("Location", UriComponentsBuilder.fromPath(BEER_PATH)
+                                    .pathSegment(beerDTO.getId()).build().toString())
+                            .bodyValue(beerDTO);
+                });
     }
 
     public Mono<ServerResponse> patchBeer(ServerRequest request) {
