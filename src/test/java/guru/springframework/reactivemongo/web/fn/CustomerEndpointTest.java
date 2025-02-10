@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.List;
 import java.util.Map;
+
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
 
 /**
  * @author john
@@ -42,6 +42,7 @@ public class CustomerEndpointTest {
                 .lastName("Smith")
                 .email("rebecca.smith@example.com")
                 .build();
+        client = client.mutateWith(mockOAuth2Login());
     }
 
     @Test
